@@ -1,0 +1,35 @@
+version: '3.8'
+
+x-base: &base
+  build:
+    context: .
+    dockerfile: Dockerfile
+  volumes:
+    - .:/app
+    - /home/aleksandr/.ssh:/home/appuser/.ssh:ro
+  env_file:
+    - .env
+  restart: unless-stopped
+  networks:
+    - testlink-network
+
+services:
+  app:
+    <<: *base
+    image: app
+    command: poetry run uvicorn src.app.main:app --host 0.0.0.0 --port 8000 --reload
+    network_mode: "host"
+    ports:
+      - "8000:8000"
+    environment:
+      - TESTLINK_API_PYTHON_SERVER_URL=${TESTLINK_URL}
+      - TESTLINK_API_PYTHON_DEVKEY=${TESTLINK_DEVKEY}
+      - OPENQA_SSH_HOST=${OPENQA_SSH_HOST}
+      - OPENQA_SSH_USER=${OPENQA_SSH_USER}
+      - OPENQA_SSH_KEY=${OPENQA_SSH_KEY}
+    profiles:
+      - app
+
+networks:
+  testlink-network:
+    driver: bridge

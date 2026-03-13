@@ -1,0 +1,27 @@
+[tool.poetry]
+name = "testlink-openqa-automator"
+version = "0.1.0"
+description = "TestLink to OpenQA automation for ALT Linux"
+authors = ["Aleksandr Aleksandr200411y@mail.ru"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.11,<4"           # ← ИСПРАВЛЕНО: добавить <4
+fastapi = "^0.104"
+uvicorn = {extras = ["standard"], version = "^0.24"}
+sqlalchemy = {extras = ["asyncio"], version = "^2.0"}
+psycopg2-binary = "^2.9"
+alembic = "^1.13"
+pydantic = "^2.5"
+testlink-api-python-client = "^0.8"
+celery = "^5.3"
+python-dotenv = "^1.0"
+requests = "^2.31"
+bs4 = "^0.0.2"
+jinja2 = "^3.1.6"
+paramiko = "^4.0.0"
+
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
