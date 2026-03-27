@@ -12,20 +12,16 @@ testlink-openqa-automator/
      ├── api/                      # Эндпоинты
         ├── openqa.py   
         ├── testlink.py            # Эндпоинты, связанные с TestLink
+     ├── integrations/
+        ├── llm.py 
      ├── services/                 # Сервисы (логика)
         ├── openqa_runner.py       # Логика для работы с OpenQA (пока не реализовано)
-        ├── result_reporter.py     # Логика для отправки отчетов о результатах (пока не реализовано)
         ├── testlink_sync.py       # Логика для получения тест-кейсов с TestLink и из базы данных
-     ├── workers/                  # (Пока не реализовано)
-     ├── database.py               # Подключение к базе данных
      ├── main.py                   
-     ├── models.py                 # ORM модели
      ├── schemas.py                # Pydantic модели для fastapi
 ├── .env
 ├──  Dockerfile
-├── alembic.ini
 ├── docker-compose.yaml
-├── init.sql
 ├── poetry.lock
 ├── pyproject.toml
 ```
@@ -38,18 +34,25 @@ git clone https://github.com/AleksandrIvanov2004/testlink-openqa-automator.git
 cd testlink-openqa-automator
 ```
 
-### 2. Запуск проекта
-#### 2.1. Сборка и запуск контейнеров redis и postgres
+### 2. Загрузка LLM-модели
 ```bash
-sudo docker compose up --build
-```
-#### 2.2. Сборка и запуск контейнера с приложением
-```bash
-sudo docker buildx build --network=host -t app .
-sudo docker compose up app --build
+docker run -d --name ollama ollama/ollama 
+docker run -d \
+  -v ollama:/root/.ollama \
+  -v $(pwd):/data \
+  -p 11435:11434 \
+  --name ollama \
+  ollama/ollama
+docker exec ollama ollama pull deepseek-coder-v2:16b
 ```
 
-### 3. Реализованные эндпоинты
+### 3. Запуск проекта
+```bash
+docker buildx build --network=host -t app .
+docker compose up app 
+```
+
+### 4. Реализованные эндпоинты
 1. Получение тест-кейса по номеру с TestLink - http://localhost:8000/api/v1/testlink/sync/{testcase_number}
-2. Получение тест-кейса по номеру из базы данных - http://localhost:8000/api/v1/testlink/cases/{testcase_number}
-3. Получение всех тест-кейсов из базы данных - http://localhost:8000/api/v1/testlink/cases
+2. Генерация автотеста и запуск job'а на openQA - http://localhost:8000/api/v1/openqa/schedule-job/{testcase_number}/{branch}/{iso}
+3. Генерация автотеста с помощью llm и запуск job'а на openQA - http://localhost:8000/api/v1/openqa/llm/schedule-job/{testcase_number}/{branch}/{iso}

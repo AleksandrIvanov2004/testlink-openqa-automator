@@ -219,10 +219,20 @@ class OpenQAService:
             html = str(testcase["preconditions"]).replace('\\n', '\n')
             html = unescape(html)
             html = re.sub(r'<br\s*/?>', '\n', html, flags=re.I)
-            blocks.extend(re.findall(r'<strong>(.*?)</strong>', html, re.DOTALL))
+
+            strong_matches = re.findall(r'<strong>(.*?)</strong>', html, re.DOTALL)
+            if strong_matches:
+                full_block = "\n".join([b.strip() for b in strong_matches])
+
+                full_block = full_block.replace('\xa0', ' ')
+                full_block = re.sub(r'\n\s*\n', '\n', full_block)
+                full_block = re.sub(r'  +', ' ', full_block)
+
+                blocks.append(full_block)
 
         try:
-            steps_list = json.loads(testcase["steps"]) if isinstance(testcase["steps"], str) else testcase["steps"] or []
+            steps_list = json.loads(testcase["steps"]) if isinstance(testcase["steps"], str) else testcase[
+                                                                                                      "steps"] or []
         except:
             steps_list = []
 
@@ -231,8 +241,17 @@ class OpenQAService:
                 html = step_data['actions'].replace('\\n', '\n')
                 html = unescape(html)
                 html = re.sub(r'<br\s*/?>', '\n', html, flags=re.I)
-                blocks.extend(re.findall(r'<strong>(.*?)</strong>', html, re.DOTALL))
 
+                strong_matches = re.findall(r'<strong>(.*?)</strong>', html, re.DOTALL)
+
+                if strong_matches:
+                    full_block = "\n".join([b.strip() for b in strong_matches])
+
+                    full_block = full_block.replace('\xa0', ' ')
+                    full_block = re.sub(r'\n\s*\n', '\n', full_block)
+                    full_block = re.sub(r'  +', ' ', full_block)  
+                    blocks.append(full_block)
+        print(blocks)
         return blocks
 
     def _fix_heredoc(self, cmd: str) -> str:

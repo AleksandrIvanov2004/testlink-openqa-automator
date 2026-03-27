@@ -23,7 +23,7 @@ app.add_middleware(
 
 # Подключаем роутеры
 app.include_router(testlink_router, prefix="/api/v1/testlink", tags=["TestLink"])
-app.include_router(openqa_router, prefix="/api/v1/openqa", tags=["OpenQA"])
+app.include_router(openqa_router, prefix="/api/v1/openqa", tags=["openqa"])
 
 
 ## 🏠 Root endpoints
