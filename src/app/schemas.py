@@ -61,11 +61,12 @@ class TestJobResponse(TestJobBase):
 
 
 class SyncResponse(BaseModel):
-    status: Literal["success"]
+    testcase_number: int
     test_suite_name: str
     steps: str
     preconditions: str
-    synced_cases: int
+    update_date: datetime
+
 
 
 class JobResponse(BaseModel):
@@ -92,6 +93,7 @@ class JobScheduleRequest(BaseModel):
     variables: Optional[Dict[str, Any]] = {}
 
 class JobScheduleResponse(BaseModel):
+    testcase_id: int
     job_id: Optional[int] = Field(None, description="OpenQA job ID")
     test_suite: str
     status: str

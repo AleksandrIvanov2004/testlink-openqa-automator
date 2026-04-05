@@ -369,7 +369,7 @@ class OpenQAService:
             "job_id": job_id,
             "test_suite": test_suite_name,
             "status": "scheduled" ,
-            "url": f"http://{self.ssh_host}/tests/{job_id}" if job_id else None
+            "url": f"http://{self.ssh_host}/tests/{job_id}#live" if job_id else None
         }
 
     def get_job_status(self, job_id: int) -> Optional[Dict[str, Any]]:

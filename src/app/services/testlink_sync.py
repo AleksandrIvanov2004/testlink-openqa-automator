@@ -16,7 +16,6 @@ def sync_testcases(testcase_number: int) -> Dict[str, Any]:
     print(f" Тест-сьют: {test_suite_name}")
     print(f"API: {tc_info[0]['name']}")
 
-    total_synced = 0
 
     if tc_info and len(tc_info) > 0:
         tc = tc_info[0]
@@ -25,25 +24,19 @@ def sync_testcases(testcase_number: int) -> Dict[str, Any]:
             'testcase_number': int(tc['tc_external_id']),
             'name': tc['name'],
             'preconditions': tc.get('preconditions', ''),
-
             'steps': json.dumps(tc.get('steps', []), ensure_ascii=False),
-
             'test_suite_name': test_suite_name,
+            'update_date': tc.get('modification_ts')
         }
 
-        total_synced += 1
-        print(f"✅ ➕ {testcase_data['name'][:40]} (ID: {testcase_data['testcase_number']})")
-        print(f"   📋 Шагов: {len(tc.get('steps', []))}")
 
 
     return {
-        "test_suite_name": test_suite_name,
         "testcase_number": testcase_number,
-        "status": "success",
-        "synced_cases": total_synced,
+        "test_suite_name": test_suite_name,
         "steps": testcase_data['steps'],
         "preconditions": testcase_data['preconditions'],
-        "sample_case": testcase_data['name'] if total_synced > 0 else None
+        "update_date": testcase_data['update_date']
     }
 
 
