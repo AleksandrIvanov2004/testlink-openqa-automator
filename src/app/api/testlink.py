@@ -6,7 +6,7 @@ from ..schemas import SyncResponse, TestCaseResponse
 
 router = APIRouter(prefix="", tags=["TestLink"])
 
-@router.post("/sync/{testcase_number}", response_model=SyncResponse, status_code=201)
+@router.get("/sync/{testcase_number}", response_model=SyncResponse, status_code=201)
 def sync_testlink(
     testcase_number: int,
 ):

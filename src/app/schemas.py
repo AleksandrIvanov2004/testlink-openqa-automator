@@ -96,7 +96,6 @@ class JobScheduleResponse(BaseModel):
     testcase_id: int
     job_id: Optional[int] = Field(None, description="OpenQA job ID")
     test_suite: str
-    status: str
     url: Optional[str] = Field(None, description="OpenQA job URL")
 
 class JobStatusResponse(BaseModel):
