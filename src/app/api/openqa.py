@@ -39,9 +39,8 @@ async def schedule_openqa_job(
         testcase_number: int,
         branch: str,
         iso: str,
-        force: bool = False  # Новый параметр
+        force: bool = True
 ):
-    # 1. Импортируем тест-кейс из TestLink
     testcase = sync_testcases(testcase_number)
     test_suite_name = testcase["test_suite_name"]
 

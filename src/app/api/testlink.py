@@ -1,6 +1,4 @@
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.orm import Session
-from typing import List
 from ..services.testlink_sync import sync_testcases
 from ..schemas import SyncResponse, TestCaseResponse
 
@@ -11,7 +9,7 @@ def sync_testlink(
     testcase_number: int,
 ):
     try:
-        result = sync_testcases(testcase_number)  # 🔥 Передаём номер
+        result = sync_testcases(testcase_number)
         return SyncResponse(
             testcase_number=result["testcase_number"],
             test_suite_name=result["test_suite_name"],

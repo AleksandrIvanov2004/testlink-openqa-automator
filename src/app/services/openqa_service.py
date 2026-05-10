@@ -77,7 +77,7 @@ class OpenQAService:
         return template.render(steps=perl_steps)
 
     def _process_command(self, steps_code, full_cmd, current_console):
-        cmd_match = re.match(r'^\s*([#$])\s+', full_cmd)  # ✅ ИСПРАВЛЕНО: убрал лишний \
+        cmd_match = re.match(r'^\s*([#$])\s+', full_cmd)
         if cmd_match:
             cmd_type = cmd_match.group(1)
             cmd = full_cmd.split(cmd_type, 1)[1].lstrip()
@@ -276,14 +276,6 @@ class OpenQAService:
 
     def is_testcase_outdated(self, test_suite_name: str, testcase_update_date: str) -> Literal[
         "new", "outdated", "no_outdated"]:
-        """
-        Проверяет статус автотеста на openQA-сервере.
-
-        Returns:
-            "new" — файл отсутствует (нужно создать)
-            "outdated" — тест-кейс обновлён (нужна перегенерация)
-            "no_outdated" — тест актуален (можно использовать существующий)
-        """
         test_dir = f"/var/lib/openqa/tests/openqa-os-autoinst-distri-altlinux/tests/task/{test_suite_name}"
         file_path = f"{test_dir}/main.pm"
 
